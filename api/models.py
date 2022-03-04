@@ -10,7 +10,7 @@ class Testimonial(models.Model):
     image = models.ImageField(upload_to=upload_to, blank=True, null=True)
     name = models.CharField(max_length=150, blank=False)
     company = models.CharField(max_length=100, blank=False)
-    title = models.CharField(max_length=200, blank=False)
+    # title = models.CharField(max_length=200, blank=False)
     text = models.TextField(null=True, blank=True)
     rating = models.FloatField(null=True, blank=True, default=0.0)
 
