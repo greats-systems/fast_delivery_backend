@@ -1,3 +1,4 @@
+from email import message
 from django.db import models
 from django.core.validators import FileExtensionValidator
 
@@ -85,3 +86,19 @@ class HomeVideo(models.Model):
     text = models.TextField(null=True, blank=True)
     video = models.FileField(upload_to=upload_to, null=True,
                              validators=[FileExtensionValidator(allowed_extensions=['MOV', 'avi', 'mp4', 'webm', 'mkv'])])
+
+    def __str__(self):
+        return str(self.title)
+
+
+class ClientEmail(models.Model):
+    name = models.CharField(max_length=200, blank=True, null=True)
+    message = models.TextField(blank=True, null=True)
+    subject = models.CharField(max_length=200, blank=True, null=True)
+    email = models.EmailField(max_length=200, blank=False)
+    phone = models.CharField(max_length=100, blank=False)
+    answered = models.CharField(max_length=10, blank=False, null=True)
+    # answered = models.BooleanField(default=True)
+
+    def __str__(self):
+        return str(self.name)

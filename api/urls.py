@@ -68,4 +68,11 @@ urlpatterns = [
     path('patch-homevideo/<str:pk>',
          PatchHomeVideo.as_view(), name='patch-homevideo'),
 
+    path('clientemails', views.getClientEmails, name='clientemails'),
+    path('add-clientemail', views.addClientEmail, name='add-clientemail'),
+    path('delete-clientemail/<str:pk>', views.deleteClientEmail,
+         name='delete-clientemail'),
+
+
+
 ]

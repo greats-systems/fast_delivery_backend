@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Testimonial, Address, Phone, Email, Team, Social, Mission, Vision, HomeVideo
+from .models import Testimonial, Address, Phone, Email, Team, Social, Mission, Vision, HomeVideo, ClientEmail
 
 
 @admin.register(Testimonial)
@@ -54,3 +54,9 @@ class VisionAdmin(admin.ModelAdmin):
 class HomeVideoAdmin(admin.ModelAdmin):
     search_fields = ("title",)
     list_display = ("title", "text", "video")
+
+
+@admin.register(ClientEmail)
+class ClientEmailAdmin(admin.ModelAdmin):
+    search_fields = ("name",)
+    list_display = ("name", "message", "subject", "email", "phone", "answered")

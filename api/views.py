@@ -3,8 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 
-from .serializers import TestimonialSerializer, AddressSerializer, PhoneSerializer, EmailSerializer, TeamSerializer, SocialSerializer, MissionSerializer, VisionSerializer, HomeVideoSerializer
-from .models import Testimonial, Address, Phone, Email, Team, Social, Mission, Vision, HomeVideo
+from .serializers import ClientEmailSerializer, TestimonialSerializer, AddressSerializer, PhoneSerializer, EmailSerializer, TeamSerializer, SocialSerializer, MissionSerializer, VisionSerializer, HomeVideoSerializer
+from .models import ClientEmail, Testimonial, Address, Phone, Email, Team, Social, Mission, Vision, HomeVideo
 
 
 @api_view(['GET'])
@@ -338,6 +338,30 @@ class PatchHomeVideo(APIView):
         qs.save()
         serializer = HomeVideoSerializer(qs)
         return Response(serializer.data)
+
+
+@api_view(['GET'])
+def getClientEmails(request):
+    qs = ClientEmail.objects.all()
+    serializer = ClientEmailSerializer(qs, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def addClientEmail(request):
+    serializer = ClientEmailSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    else:
+        return Response('serializer not valid')
+    return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+def deleteClientEmail(request, pk):
+    clientEmail = ClientEmail.objects.get(id=pk)
+    clientEmail.delete()
+    return Response('ClientEmail Deleted')
 
 
 @api_view(['GET'])

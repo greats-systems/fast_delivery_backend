@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from .models import Testimonial, Address, Phone, Email, Team, Social, Mission, Vision, HomeVideo
+from .models import ClientEmail, Testimonial, Address, Phone, Email, Team, Social, Mission, Vision, HomeVideo
 
 
 class TestimonialSerializer(ModelSerializer):
@@ -53,4 +53,10 @@ class VisionSerializer(ModelSerializer):
 class HomeVideoSerializer(ModelSerializer):
     class Meta:
         model = HomeVideo
+        fields = '__all__'
+
+
+class ClientEmailSerializer(ModelSerializer):
+    class Meta:
+        model = ClientEmail
         fields = '__all__'
