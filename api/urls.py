@@ -5,7 +5,7 @@ from.views import PatchAddress, PatchEmail, PatchHomeVideo, PatchMission, PatchP
 urlpatterns = [
     path('', views.getRoutes),
     path('testimonials', views.getTestimonials, name='testimonials'),
-    path('add-testimonials', views.addTestimonial, name='add-testimonials'),
+    path('add-testimonial', views.addTestimonial, name='add-testimonial'),
     path('delete-testimonial/<str:pk>', views.deleteTestimonial,
          name='delete-testimonials'),
     path('patch-testimonial/<str:pk>',
@@ -69,10 +69,14 @@ urlpatterns = [
          PatchHomeVideo.as_view(), name='patch-homevideo'),
 
     path('clientemails', views.getClientEmails, name='clientemails'),
+    path('clientemail/<str:pk>', views.getClientEmail, name='clientemail'),
     path('add-clientemail', views.addClientEmail, name='add-clientemail'),
     path('delete-clientemail/<str:pk>', views.deleteClientEmail,
          name='delete-clientemail'),
 
+    path('reply-email', views.ReplyEmail, name='reply-email'),
 
+    path('emailcount', views.getEmailCount, name='emailcount'),
+    path('add-emailcount', views.addEmailCount, name='add-emailcount'),
 
 ]

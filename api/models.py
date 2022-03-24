@@ -30,8 +30,9 @@ class Address(models.Model):
 
 
 class Phone(models.Model):
-    name = models.CharField(max_length=100, blank=False)
-    number = models.CharField(max_length=100, blank=False)
+    name = models.CharField(max_length=100, blank=True, null=True)
+    number = models.CharField(max_length=100, blank=True, null=True)
+    number2 = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return str(self.name)
@@ -102,3 +103,23 @@ class ClientEmail(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+
+class RepliedEmail(models.Model):
+    # name = models.CharField(max_length=200, blank=True, null=True)
+    message = models.TextField(blank=True, null=True)
+    # subject = models.CharField(max_length=200, blank=True, null=True)
+    email = models.EmailField(max_length=200, blank=False)
+    pkey = models.IntegerField(blank=True, null=True)
+    # phone = models.CharField(max_length=100, blank=False)
+    # answered = models.CharField(max_length=10, blank=False, null=True)
+    # answered = models.BooleanField(default=True)
+
+    def __str__(self):
+        return str(self.email)
+
+
+class EmailCount(models.Model):
+    totalMail = models.IntegerField(blank=True, default=0)
+    repliedMail = models.IntegerField(blank=True, default=0)
+    unrepliedMail = models.IntegerField(blank=True, default=0)

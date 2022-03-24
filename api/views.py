@@ -3,8 +3,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 
-from .serializers import ClientEmailSerializer, TestimonialSerializer, AddressSerializer, PhoneSerializer, EmailSerializer, TeamSerializer, SocialSerializer, MissionSerializer, VisionSerializer, HomeVideoSerializer
-from .models import ClientEmail, Testimonial, Address, Phone, Email, Team, Social, Mission, Vision, HomeVideo
+from django.core.mail import send_mail
+
+from .serializers import ClientEmailSerializer, TestimonialSerializer, AddressSerializer, PhoneSerializer, EmailSerializer, TeamSerializer, SocialSerializer, MissionSerializer, VisionSerializer, HomeVideoSerializer, RepliedEmailSerializer, EmailCountSerializer
+from .models import ClientEmail, Testimonial, Address, Phone, Email, Team, Social, Mission, Vision, HomeVideo, EmailCount
 
 
 @api_view(['GET'])
@@ -347,11 +349,54 @@ def getClientEmails(request):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+def getClientEmail(request, pk):
+    qs = ClientEmail.objects.get(id=pk)
+    serializer = ClientEmailSerializer(qs, many=False)
+    return Response(serializer.data)
+
+
 @api_view(['POST'])
 def addClientEmail(request):
     serializer = ClientEmailSerializer(data=request.data)
+    emailData = request.data
+    name = emailData.get('name')
+    email = emailData.get('email')
+    body = name + ' is enquiring about your services \nCheck their messages on your Dashboard'
     if serializer.is_valid():
+        send_mail('FastD Enquiry Notification', body, 'malingreatsdev@gmail.com',
+                  ['bennyakambangwe@gmail.com'], fail_silently=False)
+        # send_mail('', body , 'malingreatsdev@gmail.com',
+        #           ['bennyakambangwe@gmail.com'], fail_silently=False)
         serializer.save()
+        query = EmailCount.objects.get(id=2)
+        query.totalMail += 1
+        query.save()
+    else:
+        return Response('serializer not valid')
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def ReplyEmail(request):
+    serializer = RepliedEmailSerializer(data=request.data)
+    emailData = request.data
+
+    email = emailData.get('email')
+    message = emailData.get('message')
+    if serializer.is_valid():
+        send_mail('Hello From FastD', message, 'malingreatsdev@gmail.com',
+                  [email], fail_silently=False)
+        serializer.save()
+        pkey = emailData.get('pkey')
+        qs = ClientEmail.objects.get(id=pkey)
+        qs.answered = 'True'
+        qs.save()
+        print('Saved Email Client Update')
+        query = EmailCount.objects.get(id=2)
+        query.repliedMail += 1
+        query.unrepliedMail -= 1
+        query.save()
     else:
         return Response('serializer not valid')
     return Response(serializer.data)
@@ -362,6 +407,39 @@ def deleteClientEmail(request, pk):
     clientEmail = ClientEmail.objects.get(id=pk)
     clientEmail.delete()
     return Response('ClientEmail Deleted')
+
+
+@api_view(['GET'])
+def getEmailCount(request):
+    qs = EmailCount.objects.get(id=2)
+    serializer = EmailCountSerializer(qs, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def addEmailCount(request):
+    serializer = EmailCountSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    else:
+        return Response('serializer not valid')
+    return Response(serializer.data)
+
+
+# class CustomerView(APIView):
+
+# 	def post(self, request, *args, **kwargs):
+# 		serializer = CustomerSerializer(data = request.data)
+# 		if	serializer.is_valid():
+# 			serializer.save()
+# 			customer_data = serializer.data
+# 			customer = Customer.objects.get(email=customer_data['email'])
+
+# 			email_body = 'Someone Just Submitted a Form @malingreats.org \n\n\n NAME:		'+customer.name+'\n CITY:		'+customer.city+'\n EMAIL:		'+customer.email+'\n PHONE:		'+customer.phone+'\n COMPANY:	'+customer.company+'\n CHOICE:		'+customer.choice+'\n MESSAGE:	'+customer.themessage
+# 			data={'email_body': email_body, 'subject': 'Potential Client'}
+# 			Util.send_email(data)
+# 			return Response(serializer.data)
+# 		return Response(serializer.errors)
 
 
 @api_view(['GET'])

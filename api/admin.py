@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Testimonial, Address, Phone, Email, Team, Social, Mission, Vision, HomeVideo, ClientEmail
+from .models import Testimonial, Address, Phone, Email, Team, Social, Mission, Vision, HomeVideo, ClientEmail, RepliedEmail, EmailCount
 
 
 @admin.register(Testimonial)
@@ -59,4 +59,17 @@ class HomeVideoAdmin(admin.ModelAdmin):
 @admin.register(ClientEmail)
 class ClientEmailAdmin(admin.ModelAdmin):
     search_fields = ("name",)
-    list_display = ("name", "message", "subject", "email", "phone", "answered")
+    list_display = ("id", "name", "message", "subject",
+                    "email", "phone", "answered")
+
+
+@admin.register(RepliedEmail)
+class RepliedEmailAdmin(admin.ModelAdmin):
+    search_fields = ("email",)
+    list_display = ("email", "message", "pkey")
+
+
+@admin.register(EmailCount)
+class EmailCountAdmin(admin.ModelAdmin):
+    search_fields = ("email",)
+    list_display = ("id", "totalMail", "repliedMail", "unrepliedMail")
