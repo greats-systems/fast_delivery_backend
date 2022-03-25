@@ -38,7 +38,7 @@ class PatchTestimonial(APIView):
         qs = Testimonial.objects.get(id=pk)
         data = request.data
 
-        qs.image = data.get('image', qs.image)
+        # qs.image = data.get('image', qs.image)
         qs.name = data.get('name', qs.name)
         qs.company = data.get('company', qs.company)
         qs.text = data.get('text', qs.text)
@@ -335,8 +335,7 @@ class PatchHomeVideo(APIView):
         data = request.data
 
         qs.title = data.get('title', qs.title)
-        qs.text = data.get('text', qs.text)
-        qs.video = data.get('video', qs.video)
+        qs.link = data.get('link', qs.link)
         qs.save()
         serializer = HomeVideoSerializer(qs)
         return Response(serializer.data)

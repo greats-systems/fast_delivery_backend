@@ -8,7 +8,7 @@ def upload_to(instance, filename):
 
 
 class Testimonial(models.Model):
-    image = models.ImageField(upload_to=upload_to, blank=True, null=True)
+    # image = models.ImageField(upload_to=upload_to, blank=True, null=True)
     name = models.CharField(max_length=150, blank=False)
     company = models.CharField(max_length=100, blank=False)
     # title = models.CharField(max_length=200, blank=False)
@@ -83,10 +83,8 @@ class Vision(models.Model):
 
 
 class HomeVideo(models.Model):
-    title = models.CharField(max_length=150, blank=True)
-    text = models.TextField(null=True, blank=True)
-    video = models.FileField(upload_to=upload_to, null=True,
-                             validators=[FileExtensionValidator(allowed_extensions=['MOV', 'avi', 'mp4', 'webm', 'mkv'])])
+    title = models.CharField(max_length=150, null=True, blank=True)
+    link = models.CharField(max_length=150, null=True, blank=True)
 
     def __str__(self):
         return str(self.title)

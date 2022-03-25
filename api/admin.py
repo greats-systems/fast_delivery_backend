@@ -5,7 +5,7 @@ from .models import Testimonial, Address, Phone, Email, Team, Social, Mission, V
 @admin.register(Testimonial)
 class TestimonialAdmin(admin.ModelAdmin):
     search_fields = ("name",)
-    list_display = ("image", "name", "company", "text", "rating")
+    list_display = ("name", "company", "text", "rating")
 
 
 @admin.register(Address)
@@ -53,7 +53,7 @@ class VisionAdmin(admin.ModelAdmin):
 @admin.register(HomeVideo)
 class HomeVideoAdmin(admin.ModelAdmin):
     search_fields = ("title",)
-    list_display = ("title", "text", "video")
+    list_display = ("title", "link")
 
 
 @admin.register(ClientEmail)
