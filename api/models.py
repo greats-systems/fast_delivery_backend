@@ -96,7 +96,8 @@ class ClientEmail(models.Model):
     subject = models.CharField(max_length=200, blank=True, null=True)
     email = models.EmailField(max_length=200, blank=False)
     phone = models.CharField(max_length=100, blank=False)
-    answered = models.CharField(max_length=10, blank=False, null=True)
+    answered = models.CharField(
+        max_length=10, blank=False, null=True, default="False")
     # answered = models.BooleanField(default=True)
 
     def __str__(self):
