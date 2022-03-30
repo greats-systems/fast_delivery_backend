@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from.views import PatchAddress, PatchEmail, PatchHomeVideo, PatchMission, PatchPhone, PatchSocial, PatchTeam, PatchTestimonial, PatchVision
+from.views import PatchAddress, PatchEmail, PatchHomeVideo, PatchMission, PatchPhone, PatchSocial, PatchTeam, PatchTeamImage, PatchTestimonial, PatchVision
 
 urlpatterns = [
     path('', views.getRoutes),
@@ -39,6 +39,8 @@ urlpatterns = [
          name='delete-team'),  # This is deleting just a team member specific not the whole team
     path('patch-team/<str:pk>',
          PatchTeam.as_view(), name='patch-team'),
+    path('patch-team-image/<str:pk>',
+         PatchTeamImage.as_view(), name='patch-team-image'),
 
     path('socials', views.getSocial, name='socials'),
     path('add-social', views.addSocial, name='add-social'),

@@ -189,6 +189,15 @@ class PatchTeam(APIView):
 
         qs.name = data.get('name', qs.name)
         qs.title = data.get('title', qs.title)
+        qs.save()
+        serializer = TeamSerializer(qs)
+        return Response(serializer.data)
+
+
+class PatchTeamImage(APIView):
+    def patch(self, request, pk):
+        qs = Team.objects.get(id=pk)
+        data = request.data
         qs.image = data.get('image', qs.image)
         qs.save()
         serializer = TeamSerializer(qs)
