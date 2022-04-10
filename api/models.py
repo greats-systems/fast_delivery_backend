@@ -98,10 +98,14 @@ class ClientEmail(models.Model):
     phone = models.CharField(max_length=100, blank=False)
     answered = models.CharField(
         max_length=10, blank=False, null=True, default="False")
+    date_created = models.DateTimeField(auto_now_add=True)
     # answered = models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.name)
+
+    class Meta:
+        ordering = ('-date_created',)
 
 
 class RepliedEmail(models.Model):

@@ -9,6 +9,8 @@ from .serializers import ClientEmailSerializer, TestimonialSerializer, AddressSe
 from .models import ClientEmail, Testimonial, Address, Phone, Email, Team, Social, Mission, Vision, HomeVideo, EmailCount
 
 
+# TESTIMONIALS
+
 @api_view(['GET'])
 def getTestimonials(request):
     qs = Testimonial.objects.all()
@@ -48,6 +50,8 @@ class PatchTestimonial(APIView):
         return Response(serializer.data)
 
 
+# ADDRESS
+
 @api_view(['GET'])
 def getAddresses(request):
     qs = Address.objects.all()
@@ -84,6 +88,8 @@ class PatchAddress(APIView):
         qs.save()
         serializer = AddressSerializer(qs)
         return Response(serializer.data)
+
+# PHONE
 
 
 @api_view(['GET'])
@@ -122,6 +128,8 @@ class PatchPhone(APIView):
         return Response(serializer.data)
 
 
+# EMAIL
+
 @api_view(['GET'])
 def getEmail(request):
     qs = Email.objects.all()
@@ -157,6 +165,8 @@ class PatchEmail(APIView):
         serializer = EmailSerializer(qs)
         return Response(serializer.data)
 
+
+# TEAM
 
 @api_view(['GET'])
 def getTeam(request):
@@ -211,6 +221,8 @@ def getSocial(request):
     return Response(serializer.data)
 
 
+# SOCIAL
+
 @api_view(['POST'])
 def addSocial(request):
     serializer = SocialSerializer(data=request.data)
@@ -241,6 +253,8 @@ class PatchSocial(APIView):
         serializer = SocialSerializer(qs)
         return Response(serializer.data)
 
+
+# MISSION
 
 @api_view(['GET'])
 def getMission(request):
@@ -278,6 +292,8 @@ class PatchMission(APIView):
         return Response(serializer.data)
 
 
+# VISION
+
 @api_view(['GET'])
 def getVision(request):
     qs = Vision.objects.all()
@@ -313,6 +329,8 @@ class PatchVision(APIView):
         serializer = VisionSerializer(qs)
         return Response(serializer.data)
 
+
+# HOME VIDEO
 
 @api_view(['GET'])
 def getHomeVideo(request):
@@ -350,6 +368,8 @@ class PatchHomeVideo(APIView):
         return Response(serializer.data)
 
 
+# CLIENT EMAILS
+
 @api_view(['GET'])
 def getClientEmails(request):
     qs = ClientEmail.objects.all()
@@ -364,6 +384,13 @@ def getClientEmail(request, pk):
     return Response(serializer.data)
 
 
+@api_view(['DELETE'])
+def deleteClientEmail(request, pk):
+    clientEmail = ClientEmail.objects.get(id=pk)
+    clientEmail.delete()
+    return Response('ClientEmail Deleted')
+
+
 @api_view(['POST'])
 def addClientEmail(request):
     serializer = ClientEmailSerializer(data=request.data)
@@ -372,17 +399,20 @@ def addClientEmail(request):
     email = emailData.get('email')
     body = name + ' is enquiring about your services \nCheck their messages on your Dashboard'
     if serializer.is_valid():
-        send_mail('FastD Enquiry Notification', body, 'malingreatsdev@gmail.com',
-                  ['bennyakambangwe@gmail.com'], fail_silently=False)
-        # send_mail('', body , 'malingreatsdev@gmail.com',
-        #           ['bennyakambangwe@gmail.com'], fail_silently=False)
+        send_mail('FastD Enquiry Notification', body, 'fastdcomga@gmail.com',
+                  ['fastdcomga@gmail.com'], fail_silently=False)
+        # send_mail('', body , 'fastdcomga@gmail.com',
+        #           ['fastdcomga@gmail.com'], fail_silently=False)
         serializer.save()
-        query = EmailCount.objects.get(id=2)
+        query = EmailCount.objects.get(id=1)
         query.totalMail += 1
+        query.unrepliedMail += 1
         query.save()
     else:
         return Response('serializer not valid')
     return Response(serializer.data)
+
+# REPLY EMAIL
 
 
 @api_view(['POST'])
@@ -393,7 +423,7 @@ def ReplyEmail(request):
     email = emailData.get('email')
     message = emailData.get('message')
     if serializer.is_valid():
-        send_mail('Hello From FastD', message, 'malingreatsdev@gmail.com',
+        send_mail('Hello From FastD', message, 'fastdcomga@gmail.com',
                   [email], fail_silently=False)
         serializer.save()
         pkey = emailData.get('pkey')
@@ -401,7 +431,7 @@ def ReplyEmail(request):
         qs.answered = 'True'
         qs.save()
         print('Saved Email Client Update')
-        query = EmailCount.objects.get(id=2)
+        query = EmailCount.objects.get(id=1)
         query.repliedMail += 1
         query.unrepliedMail -= 1
         query.save()
@@ -410,16 +440,11 @@ def ReplyEmail(request):
     return Response(serializer.data)
 
 
-@api_view(['DELETE'])
-def deleteClientEmail(request, pk):
-    clientEmail = ClientEmail.objects.get(id=pk)
-    clientEmail.delete()
-    return Response('ClientEmail Deleted')
-
+# EMAIL COUNT
 
 @api_view(['GET'])
 def getEmailCount(request):
-    qs = EmailCount.objects.get(id=2)
+    qs = EmailCount.objects.get(id=1)
     serializer = EmailCountSerializer(qs, many=False)
     return Response(serializer.data)
 
